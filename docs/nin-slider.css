@@ -1,0 +1,161 @@
+@charset "UTF-8";
+/*item-slider*/
+.nin_item-slider {
+	display: flex;
+	overflow: hidden;
+}
+.nin_item-slider * {
+	user-select: none;
+}
+.nin_is_field {
+	flex: 5;
+	display: flex;
+	flex-direction: row;
+}
+.nin_is_item {
+	height: 100%;
+	flex: 0 0 calc(100%/3);
+	display: block;
+}
+.nin_is_arrow {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-basis: 5%;
+	z-index: 99;
+	background-color: #000;
+	color: #fff;
+	cursor: pointer;
+	min-width: 60px;
+}
+.nin_is_arrow:hover {
+	background-color: #03a;
+	color: #fff;
+}
+.nin_is_arrow-inactive {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-basis: 5%;
+	z-index: 99;
+	background-color: #777;
+	color: #fff;
+	cursor: pointer;
+	min-width: 60px;
+}
+/*modal*/
+.nin_modal_field {
+	background-color: rgba(0,0,0,.7);
+	position: fixed;
+	display: block;
+	top: 0;
+	left: 0;
+	width: 500px;
+	height: 500px;
+	z-index: 999;
+}
+.nin_modal {
+	display: none;
+	position: fixed;
+	z-index: 10000;
+}
+
+/*slider*/
+.nin_slider {
+	box-sizing: border-box;
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
+}
+.nin_slider * {
+	user-select: none;
+}
+.nin_slider div {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+.nin_arrow {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-basis: 5%;
+	z-index: 99;
+	background-color: #000;
+	color: #fff;
+	min-width: 60px;
+	cursor: pointer;
+}
+
+.nin_slider_arrow {
+	height: 100%;
+	cursor: pointer;
+	background-color: rgba(0,0,0,.1);
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 5%;
+	z-index: 99;
+	color: white;
+	min-width: 60px;
+}
+.nin_slider_arrow:hover {
+	background-color: rgba(0,0,0,.3);
+}
+.nin_slider_link-field {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	top: 86%;
+	width: 90%;
+	height: 10%;
+	margin: 0 auto;
+}
+.nin_slider_link-active, .nin_slider_link-inactive {
+	height: 100%;
+	margin: 0 0.5%;
+	border-radius: 50%;
+	cursor: pointer;
+	background-color: white;
+	box-sizing: border-box;
+}
+.nin_slider_link-active {
+	background-color: #ff8;
+	background: radial-gradient(#fff, #ff5, #cca);
+	border: ridge #aaa;
+	box-shadow: 0 0 10px 1px #fff;
+	
+}
+.nin_slider_link-inactive {
+	background-color: #222;
+	border: groove #ccc;
+}
+
+/*tab*/
+.nin_tab_titles {
+	display: flex;
+	justify-content: space-between;
+}
+.nin_tab_titles div {
+	box-sizing: border-box;
+	flex: 1;
+	text-align: center;
+}
+.nin_tab_content-list {
+	position: relative;
+	display: block;
+	overflow: hidden;
+}
+.nin_tab_content-list .nin_tab_content {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
