@@ -1,8 +1,8 @@
 "use strict";
 var nin = {};
-function log(a) {console.log(a)};
 nin.onload =[];
-window.addEventListener("load", function() {
+setTimeout(ninStart, 1000);
+function ninStart() {
 	class NinLibController {
 		constructor(onload) {
 			window.addEventListener("resize", this.onResize.bind(this));
@@ -534,4 +534,4 @@ window.addEventListener("load", function() {
 	}
 	nin = new NinLibController(nin.onload);
 	nin.init();
-});
+}
