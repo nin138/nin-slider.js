@@ -2,7 +2,6 @@
 var nin = {};
 nin.onload =[];
 function ninStart() {
-	window.addEventListener("load", function() {
 	class NinLibController {
 		constructor(onload) {
 			window.addEventListener("resize", this.onResize.bind(this));
