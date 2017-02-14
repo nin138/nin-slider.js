@@ -2,6 +2,7 @@
 var nin = {};
 nin.onload =[];
 function ninStart() {
+	window.addEventListener("load", function() {
 	class NinLibController {
 		constructor(onload) {
 			window.addEventListener("resize", this.onResize.bind(this));
@@ -20,24 +21,26 @@ function ninStart() {
 			this.initTab();
 			this.initModal();
 			this.initSlider();
-			for(let func of this.onload) func();
+			for(var i = 0; i< this.onload.length; i++) this.onload[i]();
+			this.onload = {};
+			this.onload.push = function(fn) { fn(); };
 		}
 		initItemSlider() {
 			this.itemSlider = [];
-			let list = document.getElementsByClassName('nin_item-slider');
+			var list = document.getElementsByClassName('nin_item-slider');
 			for (var i = 0; i < list.length; i++) {
 				this.itemSlider.push(new NinItemSlider(list[i]));
 			}
 		}
 		initTab() {
 			this.tab = [];
-			let list = document.getElementsByClassName('nin_tab');
+			var list = document.getElementsByClassName('nin_tab');
 			for (var i = 0; i < list.length; i++) {
 				this.tab.push(new NinTab(list[i]));
 			}
 		}
 		initModal() {
-			let modalEls = document.getElementsByTagName("nin-modal");
+			var modalEls = document.getElementsByTagName("nin-modal");
 			for (var i = 0; i < modalEls.length; i++) {
 				modalEls[i].style.display = "none";
 				modalEls[i].style.zIndex = "1000";
@@ -47,15 +50,13 @@ function ninStart() {
 		}
 		initSlider() {
 			this.slider = [];
-			let ninSliderElement = document.getElementsByClassName('nin_slider');
-			for (var i = 0;ninSliderElement.length > i; i++) {
+			var ninSliderElement = document.getElementsByClassName('nin_slider');
+			for (var i = 0; ninSliderElement.length > i; i++) {
 				this.slider.push(new NinSlider(ninSliderElement[i]));
 			}
 		}
 		getItemSliderById(id) {
-			for(let is of this.itemSlider) {
-				if(is.id == id) return is;
-			}
+			for(var i = 0; i < this.itemSlider.length; i++) if(this.itemSlider[i].id == id) return this.itemSlider[i]; 
 			return null;
 		}
 		onResize() {
@@ -65,9 +66,7 @@ function ninStart() {
 			this.resizeItemSlider();
 		}
 		resizeItemSlider() {
-			for(let itemSlider of this.itemSlider) {
-				itemSlider.onResize();
-			}
+			for(var i = 0; i < this.itemSlider.length; i++) this.itemSlider[i].onResize();
 		}
 		getPageX(ev) { return ev.pageX || ev.changedTouches[0].pageX; }
 		getPageY(ev) { return ev.pageY || ev.changedTouches[0].pageY; }
@@ -83,7 +82,7 @@ function ninStart() {
 				percent: 0,
 			};
 			this.field;
-			this.option = { volume: 3, scrollVolume: 3, spd: 5 };
+			this.option = { size: 3, scrollVolume: 3, spd: 5 };
 		}
 		slideTo() {
 			this.translate.percent += this.option.spd;
@@ -151,9 +150,9 @@ function ninStart() {
 		onMouseup_(ev) {
 			if(this.click.flag) {
 				this.click.flag = false;
-				let pageX = nin.getPageX(ev);
+				var pageX = nin.getPageX(ev);
 				if(Math.abs(pageX - this.click.start) < 30) {
-					let func = this.events[ev.target.getAttribute("data-nin")];
+					var func = this.events[ev.target.getAttribute("data-nin")];
 					if(func) func();
 				} else {
 					if(ev.timeStamp - this.click.now.time < 200 && this.click.now.time - this.click.before.time != 0) {
@@ -190,10 +189,10 @@ function ninStart() {
 			this.init();
 		}
 		init() {
-			let ops = this.el.getAttribute("data-option");
+			var ops = this.el.getAttribute("data-option");
 			if(ops) {
-				let obj = JSON.parse(ops);
-				for(let op in obj) this.option[op] = obj[op];
+				var obj = JSON.parse(ops);
+				for(var op in obj) this.option[op] = obj[op];
 			}
 			while(this.el.children.length) {
 				this.addItem_(this.el.children[0]);
@@ -219,15 +218,15 @@ function ninStart() {
 			el.onclick = null;
 			this.count++;
 			el.classList.add("nin_is_item");
-			el.style.flexBasis = "calc(100%/"+ this.option.volume +")";
+			el.style.flexBasis = "calc(100%/"+ this.option.size +")";
 			this.field.appendChild(el);
 		}
 		calcSize_() {
 			this.width = this.field.clientWidth;
-			this.translate.max = 0 - (this.field.children.length - this.option.volume) * this.width / this.option.volume;
+			this.translate.max = 0 - (this.field.children.length - this.option.size) * this.width / this.option.size;
 		}
 		onResize() {
-			let beforeMax = this.translate.max;
+			var beforeMax = this.translate.max;
 			this.calcSize_();
 			this.checkCollision_();
 			this.translate.val *= this.translate.max / beforeMax;
@@ -244,8 +243,8 @@ function ninStart() {
 			this.checkCollision_();
 		}
 		onArrowClicked_(isLeft) {
-			if(isLeft) this.translate.to = this.translate.val + this.width/this.option.volume*this.option.scrollVolume;
-			else this.translate.to = this.translate.val - this.width/this.option.volume*this.option.scrollVolume;
+			if(isLeft) this.translate.to = this.translate.val + this.width/this.option.size*this.option.scrollVolume;
+			else this.translate.to = this.translate.val - this.width/this.option.size*this.option.scrollVolume;
 			this.checkCollision_();
 			this.translate.amount = (this.translate.to - this.translate.val)/100*this.option.spd;
 			this.translate.percent = 0;
@@ -272,19 +271,19 @@ function ninStart() {
 			this.init();
 		}
 		init() {
-			let classList = this.el.children[0].classList;
+			var classList = this.el.children[0].classList;
 			for (var i = 0; i < classList.length; i++) {
 				if(classList[i].startsWith('active')) this.class.active = classList[i];
 				else if(classList[i].startsWith('inactive')) this.class.inactive = classList[i];
 			}
 			this.el.children[0].className = "nin_tab_titles";
-			for(let el of this.titles) el.classList.add(this.class.inactive);
+			for(var i = 0; i < this.titles.length; i++) this.titles[i].className = this.class.inactive;
 			this.content.style.height = "0";
-			for (var i = 0; i < this.titles.length; i++) this.titles[i].addEventListener('mousedown', this.clicked.bind(this, i));
+			for(var i = 0; i < this.titles.length; i++) this.titles[i].addEventListener('mousedown', this.clicked.bind(this, i));
 			this.content.classList.add("nin_tab_content-list");
-			for (let item of this.contentItems) {
-				item.style.display = "none";
-				item.classList.add("nin_tab_content");
+			for(var i = 0; i < this.contentItems.length; i++) {
+				this.contentItems[i].style.display = "none";
+				this.contentItems[i].classList.add("nin_tab_content");
 			}
 		}
 		clicked(num, event) {
@@ -350,7 +349,7 @@ function ninStart() {
 		constructor(el) {
 			this.el = el;
 			this.contents = [];
-			for(let child of el.children) this.contents.push(child);			
+			for(var i = 0; i < el.children.length; i++) this.contents.push(el.children[i]);
 			this.linkField;
 			this.linkEls = [];
 			this.events =[];
@@ -378,12 +377,12 @@ function ninStart() {
 			if(option) {
 				try {
 					option = JSON.parse(option);
-					for(let key in option) this.option[key] = option[key];
+					for(var key in option) this.option[key] = option[key];
 				} catch(e) { console.log(e);}
 			}
 		}
 		onResize() {
-			for(let el of this.linkEls) el.style.width = el.offsetHeight + "px";
+			for(var i = 0; i < this.linkEls.length; i++) this.linkEls[i].style.width = this.linkEls[i].offsetHeight + "px";
 		}
 		init() {
 			this.setArrow();
@@ -394,7 +393,7 @@ function ninStart() {
 				this.events[i] = this.contents[i].onclick;
 				if(i != 0)this.contents[i].style.transform = "translateX(100%)";
 				this.contents[i].onclick = null;
-				let linkEl = document.createElement('li');
+				var linkEl = document.createElement('li');
 				linkEl.onclick = this.linkClicked.bind(this, i);
 				this.linkField.appendChild(linkEl);
 				this.linkEls[i] = linkEl;
@@ -406,9 +405,9 @@ function ninStart() {
 			this.onSlide(0);
 		}
 		setArrow() {
-			let leftarrow = document.createElement('span');
+			var leftarrow = document.createElement('span');
 			leftarrow.className = "nin_slider_arrow";
-			let rightarrow = document.createElement('span');
+			var rightarrow = document.createElement('span');
 			rightarrow.className = "nin_slider_arrow";
 			leftarrow.style.left = 0;
 			rightarrow.style.right = 0;
@@ -420,7 +419,7 @@ function ninStart() {
 			this.el.appendChild(leftarrow);
 		}
 		onSlide(num) {
-			for(let i = 0; i < this.linkEls.length; i++) this.linkEls[i].className = (i == num)? "nin_slider_link-active" : "nin_slider_link-inactive";
+			for(var i = 0; i < this.linkEls.length; i++) this.linkEls[i].className = (i == num)? "nin_slider_link-active" : "nin_slider_link-inactive";
 			if(this.option.auto) {
 				clearTimeout(this.timer);
 				this.timer = setTimeout(this.arrowClicked.bind(this, 1), this.option.auto_interval);
@@ -430,7 +429,7 @@ function ninStart() {
 			this.clickPoint = nin.getPageX(ev);
 		}
 		onMouseup(ev) {
-			let mouseUp = nin.getPageX(ev);
+			var mouseUp = nin.getPageX(ev);
 			if (this.clickPoint > mouseUp && this.clickPoint > mouseUp + 50) {
 				this.arrowClicked(0);
 				ev.preventDefault();
@@ -446,15 +445,15 @@ function ninStart() {
 		linkClicked(num) {
 			if(!this.action.moving) {
 				if(num != this.active) {
-					let a = (this.active - num < 1)? this.active + this.contents.length - num : this.active - num;
-					let b = (num - this.active < 1)? num + this.contents.length - this.active : num - this.active;
+					var a = (this.active - num < 1)? this.active + this.contents.length - num : this.active - num;
+					var b = (num - this.active < 1)? num + this.contents.length - this.active : num - this.active;
 					this.direction = (a >= b )? "left" : "right";
 					this.moveTo(num);
 				}	
 			} else this.nextAction = num;
 		}
 		arrowClicked(num) {
-			let dir = (num == 0)? this.active -1 : this.active +1;
+			var dir = (num == 0)? this.active -1 : this.active +1;
 			if(dir < 0 ) dir = this.length-1;
 			else if(dir >= this.length) dir = 0;
 			this.linkClicked(dir)
