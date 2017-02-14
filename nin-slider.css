@@ -13,7 +13,7 @@
 	flex-direction: row;
 }
 .nin_is_item {
-	height: 100%;
+	height: inherit;
 	flex: 0 0 calc(100%/3);
 	display: block;
 }
