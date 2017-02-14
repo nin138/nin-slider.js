@@ -1,7 +1,6 @@
 "use strict";
 var nin = {};
 nin.onload =[];
-setTimeout(ninStart, 1000);
 function ninStart() {
 	class NinLibController {
 		constructor(onload) {
