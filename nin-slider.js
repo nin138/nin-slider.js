@@ -151,7 +151,11 @@ window.addEventListener("load", function() {
 				this.click.flag = false;
 				var pageX = nin.getPageX(ev);
 				if(Math.abs(pageX - this.click.start) < 30) {
-					var func = this.events[ev.target.getAttribute("data-nin")];
+					var target = ev.target;
+					while(target.className.indexOf("nin_is_item") == -1) {
+						target = target.parentNode;
+					}
+					var func = this.events[target.getAttribute("data-nin")];
 					if(func) func();
 				} else {
 					if(ev.timeStamp - this.click.now.time < 200 && this.click.now.time - this.click.before.time != 0) {
@@ -426,6 +430,7 @@ window.addEventListener("load", function() {
 		}
 		onMousedown(ev) {
 			this.clickPoint = nin.getPageX(ev);
+			ev.preventDefault();
 		}
 		onMouseup(ev) {
 			var mouseUp = nin.getPageX(ev);
